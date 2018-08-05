@@ -5,6 +5,8 @@ with open("nibbles.txt", 'r') as f:
 
 j = []
 clean = []
+
+##Constellation Coordinates
 const = [['0000','0100','1100','1000'],
          ['0001','0101','1101','1001'],
          ['0011','0111','1111','1011'],
@@ -18,8 +20,8 @@ for p in j:
     p = p.strip('(')
     clean.append(p)
 
+##Constellation pairs
 pairs = []
-
 
 for c in clean:
     pairs.append(c.split(', '))
@@ -38,8 +40,8 @@ for i in range(0, len(pairs)):
         else:
             pairs[i][x] = '[NP]'
 
-##Actually nibbles
-ascii = []
+##Nibbles (4 bits)
+nibbles = []
 
 for i in range(0, len(pairs)):
     if pairs[i][0] == -3:
@@ -60,20 +62,33 @@ for i in range(0, len(pairs)):
     elif pairs[i][1] == 3:
         y = 0
 
-    ascii.append(const[y][x])
+    nibbles.append(const[y][x])
 
 ##Ascii value in Bytes
 ascii2 = []
 
-for i in range(0, len(ascii), 2):
-    ascii2.append(ascii[i]+ascii[i+1])
+for i in range(0, len(nibbles), 2):
+    ascii2.append(nibbles[i]+nibbles[i+1])
 
+ascii3 = []
+##Byte to Ascii int value
 for i in range(0, len(ascii2)):
-    ascii2[i] = int(ascii2[i], 2)
+    ascii3.append(int(ascii2[i], 2))
 
 ##Decoded message
 message = ''
 
-for i in ascii2:
+for i in ascii3:
     message = message + chr(i)
 
+##for i in range(0, len(ascii2)):
+##    print("{0:2} {1} {2}".format(str(i+1), chr(ascii3[i]), str(ascii2[i])))
+
+count = 0
+for i in range(0, len(clean)):
+    print("({}) decodes as {}".format(clean[i], nibbles[i]))
+    if ((i+1)%2) == 0:
+        print('together, {} gives "{}"'.format(ascii2[count], chr(ascii3[count])))
+        count += 1
+
+print("\nfinal decoded message: \n" + message)
